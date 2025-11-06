@@ -1,7 +1,10 @@
 from django.shortcuts import render
+from django.views.generic import CreateView
+
 from .models import Library
 from django.views.generic.detail import DetailView
 from .models import Book
+from django.contrib.auth.forms import UserCreationForm
 
 
 def list_books(request):
@@ -18,3 +21,9 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context["books"] = Book.objects.all()
         return context
+
+
+class UserRegisterView(CreateView):
+    template_name = "relationship_app/register.html"
+    form_class = UserCreationForm
+    success_url = "/login/"
