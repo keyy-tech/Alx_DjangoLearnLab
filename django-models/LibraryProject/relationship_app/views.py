@@ -5,6 +5,7 @@ from .models import Library
 from django.views.generic.detail import DetailView
 from .models import Book
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
 
 
 def list_books(request):
@@ -26,4 +27,9 @@ class LibraryDetailView(DetailView):
 class UserRegisterView(CreateView):
     template_name = "relationship_app/register.html"
     form_class = UserCreationForm
-    success_url = "/login/"
+    success_url = "list_all_books"
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)
