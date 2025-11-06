@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView
 
 def list_all_books(request):
     books = Book.objects.select_related("author").all()
-    return render(request, "books_list.html", {"books": books})
+    return render(request, "list_books.html", {"books": books})
 
 
 class DetailLibraryList(DetailView):
