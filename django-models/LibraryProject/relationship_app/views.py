@@ -6,20 +6,15 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
 
-def _get_user_role(user):
-    return getattr(getattr(user, "userprofile", None), "role", None)
-
-
-def is_admin(user):
-    return _get_user_role(user) == "admin"
-
-
-def is_librarian_or_admin(user):
-    return _get_user_role(user) in ("admin", "librarian")
-
-
-def is_member_or_higher(user):
-    return _get_user_role(user) in ("admin", "librarian", "member")
+def is_role(user):
+    role = getattr(getattr(user, "profile", None), "role", None)
+    if role == "admin":
+        return True
+    if role == "librarian":
+        return True
+    if role == "member":
+        return True
+    return False
 
 
 def list_books(request):
@@ -52,18 +47,18 @@ def register(request):
 
 
 @login_required
-@user_passes_test(is_admin)
+@user_passes_test(is_role)
 def admin_view(request):
     return render(request, "relationship_app/admin_view.html")
 
 
 @login_required
-@user_passes_test(is_librarian_or_admin)
+@user_passes_test(is_role)
 def librarian_view(request):
     return render(request, "relationship_app/librarian_view.html")
 
 
 @login_required
-@user_passes_test(is_member_or_higher)
+@user_passes_test(is_role)
 def member_view(request):
     return render(request, "relationship_app/member_view.html")
