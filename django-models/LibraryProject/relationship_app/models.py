@@ -33,7 +33,7 @@ class Librarian(models.Model):
     )
 
 
-class Profile(models.Model):
+class UserProfile(models.Model):
     ROLE_CHOICE = [("admin", "Admin"), ("librarian", "Librarian"), ("member", "Member")]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=100)
