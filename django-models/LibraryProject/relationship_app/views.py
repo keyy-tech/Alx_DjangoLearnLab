@@ -6,16 +6,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 
 
-def is_admin(user):
-    return getattr(getattr(user, "profile", None), "role", None) == "admin"
-
-def is_librarian(user):
-    return getattr(getattr(user, "profile", None), "role", None) == "librarian"
-
-def is_member(user):
-    return getattr(getattr(user, "profile", None), "role", None) == "member"
-
-
 
 def list_books(request):
     books = Book.objects.select_related("author").all()
@@ -46,6 +36,27 @@ def register(request):
     return render(request, "relationship_app/register.html", {"form": form})
 
 
+# Role check helper functions
+def _get_user_role(user):
+    """
+    Safe helper to return the user's profile role or None if no profile.
+    """
+    return getattr(getattr(user, "userprofile", None), "role", None)
+
+def is_admin(user):
+    return _get_user_role(user) == "Admin"
+
+def is_librarian(user):
+    return _get_user_role(user) == "Librarian"
+
+def is_member(user):
+    return _get_user_role(user) == "Member"
+
+
+
+
+
+# Role-restricted views
 @login_required
 @user_passes_test(is_admin)
 def admin_view(request):
@@ -62,3 +73,4 @@ def librarian_view(request):
 @user_passes_test(is_member)
 def member_view(request):
     return render(request, "relationship_app/member_view.html")
+
