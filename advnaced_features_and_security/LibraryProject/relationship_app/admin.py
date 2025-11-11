@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, Author, Library, Librarian, CustomUser
+from .models import Book, Author, Library, Librarian
 
 admin.site.site_header = "Library Management Admin"
 admin.site.site_title = "Library Management Admin Portal"
@@ -24,27 +24,3 @@ class LibraryAdmin(admin.ModelAdmin):
 @admin.register(Librarian)
 class LibrarianAdmin(admin.ModelAdmin):
     list_display = ("name", "library")
-
-
-@admin.register(CustomUser)
-class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ("username", "email", "first_name", "last_name", "last_login")
-    fieldsets = (
-        ("Credentials", {"fields": ("username", "password")}),
-        ("Personal info", {"fields": ("first_name", "last_name", "email")}),
-        (
-            "Permissions",
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                )
-            },
-        ),
-        ("Important dates", {"fields": ("last_login", "date_joined")}),
-    )
-    search_fields = ("username", "email", "first_name", "last_name")
-    ordering = ("username",)
