@@ -1,10 +1,24 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.contrib.auth.models import UserManager
 
-from bookshelf.manager import CustomUserManager
+
+class CustomUserManager(UserManager):
+    def create_user(self,email,password=None, **extra_fields):
+        if not email:
+            raise ValueError("Email is required")
+        user = self.model(email=self.normalize_email(email), **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self,email,password=None,**extra_fields):
+        extra_fields.setdefault("is_staff",True)
+        extra_fields.setdefault("is_superuser",True)
+        extra_fields.setdefault("is_active",True)
+        return self.create_user(email,password,**extra_fields)
 
 
-# Create your models here.
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
