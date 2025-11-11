@@ -17,6 +17,15 @@ class Book(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        permissions = [
+            ("can_add_book", "Can add book"),
+            ("can_change_book", "Can change book"),
+            ("can_delete_book", "Can delete book"),
+            ("can_view_book", "Can view book"),
+        ]
+        ordering = ["title"]
+
 
 class Library(models.Model):
     name = models.CharField(max_length=100)
@@ -35,7 +44,7 @@ class Librarian(models.Model):
 
 class UserProfile(models.Model):
     ROLE_CHOICE = [("admin", "Admin"), ("librarian", "Librarian"), ("member", "Member")]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="profile")
     role = models.CharField(max_length=100)
 
     def __str__(self):
