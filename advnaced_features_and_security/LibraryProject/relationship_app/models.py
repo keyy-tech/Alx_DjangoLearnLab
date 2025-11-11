@@ -2,13 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
-from relationship_app.manager import CustomUserManager
+from bookshelf.manager import CustomUserManager
 
 
 # Create your models here.
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
-    profile_picture = models.ImageField(upload_to="profile_pictures/", null=True, blank=True)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/", null=True, blank=True
+    )
 
     objects = CustomUserManager()
 
@@ -54,7 +56,7 @@ class Librarian(models.Model):
 
 class UserProfile(models.Model):
     ROLE_CHOICE = [("admin", "Admin"), ("librarian", "Librarian"), ("member", "Member")]
-    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     role = models.CharField(max_length=100)
 
     def __str__(self):
