@@ -9,7 +9,6 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ["publication_year"]
 
 
-@admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ("username", "email", "first_name", "last_name", "last_login")
     fieldsets = (
@@ -31,3 +30,6 @@ class CustomUserAdmin(admin.ModelAdmin):
     )
     search_fields = ("username", "email", "first_name", "last_name")
     ordering = ("username",)
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
