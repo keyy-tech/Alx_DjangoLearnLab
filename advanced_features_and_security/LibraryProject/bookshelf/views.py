@@ -41,6 +41,7 @@ def form_example(request):
         messages.error(request, "Please fill in the form to create a new book")
     return render(request, "bookshelf/form_example.html", {"form": form})
 
+
 @permission_required("bookshelf.change_book", raise_exception=True)
 def book_update(request, book_id):
     book = get_object_or_404(Book, id=book_id)
