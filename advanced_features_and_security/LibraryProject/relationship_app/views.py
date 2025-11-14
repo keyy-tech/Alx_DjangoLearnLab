@@ -86,7 +86,7 @@ def member_view(request):
 @login_required
 @permission_required("relationship_app.can_view_book")
 def book_list(request):
-    books = Book.objects.select_related("authors").all()
+    books = Book.objects.select_related("author").all()
     context = {"books": books}
     return render(request, "relationship_app/list_books.html", context)
 
