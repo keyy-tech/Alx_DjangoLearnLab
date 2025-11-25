@@ -1,0 +1,55 @@
+###
+POST {{localhost}}book/create/
+Content-Type: application/json
+Authorization: Token 9f55662c250b88b081b3e65507483c98286dab9a
+
+{
+  "title": "Life Book 1",
+  "publication_year": 2021,
+  "author": 1
+}
+
+
+###
+GET {{localhost}}book/?publication_year=2021
+Content-Type: application/json
+
+
+###
+GET {{localhost}}book/{{pk}}/
+Content-Type: application/json
+
+###
+PUT {{localhost}}book/{{pk}}/update/
+Content-Type: application/json
+Authorization: Token {{token}}
+
+{
+  "title": "Life Story 1",
+  "publication_year": 2021,
+  "author": 1
+}
+
+###
+PATCH {{localhost}}book/{{pk}}/update/
+Content-Type: application/json
+
+
+{
+  "title": "Life Book 3"
+}
+
+###
+DELETE {{localhost}}book/{{pk}}/delete/
+Content-Type: application/json
+
+###
+POST {{localhost}}token/create/
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "password": "{{password}}"
+}
+
+
