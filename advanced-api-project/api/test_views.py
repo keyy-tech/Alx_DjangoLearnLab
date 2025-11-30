@@ -88,6 +88,8 @@ class APITesting(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+        self.assertEqual(response.data["count"], 1)
+
     def test_delete_book(self):
         self.url = reverse("book-delete", kwargs={"pk": self.book.id})
 
@@ -103,6 +105,8 @@ class APITesting(APITestCase):
         response = self.client.get(self.url, format="json")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        print(response.data)
 
     def test_unauthorised_book_list(self):
         self.url = reverse("book-list")
