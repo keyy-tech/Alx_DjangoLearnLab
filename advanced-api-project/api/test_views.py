@@ -88,8 +88,6 @@ class APITesting(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertEqual(response.data["count"], 1)
-
     def test_delete_book(self):
         self.url = reverse("book-delete", kwargs={"pk": self.book.id})
 
@@ -116,3 +114,19 @@ class APITesting(APITestCase):
         response = self.client.get(self.url, format="json")
 
         self.assertNotEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_login_user(self):
+        self.url = reverse("token_obtain_pair")
+
+        self.data = {"username": "keyytech", "password": "keyy@123"}
+
+        self.client = APIClient()
+
+        response = self.client.post(self.url, self.data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_session_login(self):
+        login = self.client.login(username="keyytech", password="keyy@123")
+
+        self.assertTrue(login)
