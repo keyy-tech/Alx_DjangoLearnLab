@@ -1,1 +1,8 @@
 **/.idea/
+**/.vscode/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+api/__pycache__/
+/advanced-api-project/api/__pycache__/
+advanced-api-project/api/__pycache__/test_views.cpython-314.pyc
