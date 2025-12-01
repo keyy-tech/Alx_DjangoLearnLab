@@ -29,3 +29,7 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Logged out successfully")
     return redirect("login")
+
+def profile_view(request):
+    context = {"users":request.user}
+    return render(request,"blog/profile.html",context)
