@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}" />
+    <title>{% block title %}Blog Platform{% endblock title %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/" class="nav-brand">
+          <span>Blog</span>Platform
+        </a>
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+          <li><a href="{% url 'register' %}" class="nav-link active">Register</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="section">
+      <div class="container container-sm">
+        {% block content %} 
+        <!-- Content will be injected here -->
+        {% endblock content %}
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="text-center">
+          <p class="small-text">&copy; {% now "Y" %} Blog Platform. All rights reserved.</p>
+          <p class="small-text mt-2">Built with Django and love</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
