@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Post</title>
+</head>
+<body>
+    <h1>Delete Post</h1>
+    <p>Are you sure you want to delete this post?</p>
+    {% if object %}
+        <h2>{{ object.title }}</h2>
+        <p>By {{ object.author.username }} on {{ object.published_date }}</p>
+        <p>{{ object.content|truncatechars:200 }}</p>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+        <a href="{% url 'home' %}">Cancel</a>
+    </form>
+</body>
+</html>
