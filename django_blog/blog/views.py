@@ -122,7 +122,7 @@ class PostListView(generic.ListView):
                 | Q(author__username__icontains=query)
             )
         if tag:
-            queryset = queryset.filter(tags__name__in=[tag])
+            queryset = queryset.filter(tags__name__icontains=tag)
         return queryset
 
 
