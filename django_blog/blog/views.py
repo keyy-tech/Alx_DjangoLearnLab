@@ -125,7 +125,7 @@ class PostListView(generic.ListView):
             )
 
         if tag:
-            queryset = queryset.filter(tags__name__in=[tag]).distinct()
+            queryset = queryset.filter(tags__name__icontains=tag)
 
         return queryset
 
