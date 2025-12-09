@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, LoginForm, PostForm, CommentForm
 from .models import Post, Comment
 
@@ -43,11 +43,12 @@ def logout_view(request):
     messages.success(request, "Logged out successfully")
     return redirect("login")
 
-
+@login_required
 def profile_view(request):
     return render(request, "blog/profile.html", {"users": request.user})
 
 
+@login_required
 def update_profile(request):
     form = RegisterForm(instance=request.user)
 
@@ -61,6 +62,7 @@ def update_profile(request):
     return render(request, "blog/update_profile.html", {"form": form})
 
 
+@login_required
 def delete_account(request):
     request.user.delete()
     return redirect("login")
