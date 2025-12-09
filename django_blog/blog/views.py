@@ -47,7 +47,8 @@ def update_profile(request):
             messages.success(request, "Profile updated successfully")
     messages.error(request, "Please fill in all the fields")
     context = {"form": form}
-    return render(request, "blog/update_profile.html",context)
+    return render(request, "blog/update_profile.html", context)
+
 
 def delete_account(request):
     request.user.delete()
