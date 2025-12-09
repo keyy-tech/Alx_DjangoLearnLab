@@ -13,7 +13,7 @@ class Post(models.Model):
         return f"{self.title} - {self.author.username}"
 
 
-class Comments(models.Model):
+class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     author = models.CharField(max_length=255)
     content = models.TextField()
