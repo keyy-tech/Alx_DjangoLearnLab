@@ -8,6 +8,13 @@
     <h1>All Posts</h1>
 
     <p><a href="{% url 'post_create' %}">Create New Post</a></p>
+    <form method="get" action="{% url 'blog:post-list' %}">
+        <input type="text" name="q" placeholder="Search..." value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+    {% for tag in post.tags.all %}
+        <a href="{% url 'blog:post-list' %}?tag={{ tag.name }}">{{ tag.name }}</a>
+    {% endfor %}
 
     {% if posts %}
     <ul>

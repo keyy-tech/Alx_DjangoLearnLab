@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, LoginForm, PostForm, CommentForm
 from .models import Post, Comment
-
+from django.db.models import Q
 
 # ----------------------------
 # USER VIEWS
@@ -42,6 +42,7 @@ def logout_view(request):
     logout(request)
     messages.success(request, "Logged out successfully")
     return redirect("login")
+
 
 @login_required
 def profile_view(request):
@@ -111,7 +112,18 @@ class PostListView(generic.ListView):
     context_object_name = "posts"
 
     def get_queryset(self):
-        return Post.objects.all().order_by("-published_date")
+        queryset = Post.objects.all().order_by("-published_date")
+        query = self.request.GET.get("q")
+        tag = self.request.GET.get("tag")
+        if query:
+            queryset = queryset.filter(
+                Q(title__icontains=query)
+                | Q(content__icontains=query)
+                | Q(author__username__icontains=query)
+            )
+        if tag:
+            queryset = queryset.filter(tags__name__in=[tag])
+        return queryset
 
 
 class PostDetailView(generic.DetailView):
