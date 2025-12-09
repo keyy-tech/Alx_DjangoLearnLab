@@ -112,17 +112,21 @@ class PostListView(generic.ListView):
     context_object_name = "posts"
 
     def get_queryset(self):
-        queryset = Post.objects.all().order_by("-published_date")
         query = self.request.GET.get("q")
         tag = self.request.GET.get("tag")
+
+        queryset = Post.objects.all().order_by("-published_date")
+
         if query:
-            queryset = queryset.filter(
+            queryset = Post.objects.filter(
                 Q(title__icontains=query)
                 | Q(content__icontains=query)
                 | Q(author__username__icontains=query)
             )
+
         if tag:
-            queryset = queryset.filter(tags__name__icontains=tag)
+            queryset = queryset.filter(tags__name__in=[tag]).distinct()
+
         return queryset
 
 
