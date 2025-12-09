@@ -1,11 +1,38 @@
 from django.urls import path
 from . import views
 
+app_name = "blog"
+
 urlpatterns = [
-    path("register/", views.create_user, name="register"),
+
+    # -------------------------
+    # USER AUTH
+    # -------------------------
+    path("register/", views.register, name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+
+    # PROFILE
     path("profile/", views.profile_view, name="profile"),
-    path("update_profile/", views.update_profile, name="update_profile"),
-    path("delete_account/", views.delete_account, name="delete_account"),
+    path("profile/update/", views.update_profile, name="update-profile"),
+    path("profile/delete/", views.delete_account, name="delete-account"),
+
+    # -------------------------
+    # POSTS
+    # -------------------------
+    path("", views.PostListView.as_view(), name="post-list"),
+    path("post/create/", views.PostCreateView.as_view(), name="post-create"),
+    path("post/<int:pk>/", views.PostUpdateView.as_view(), name="post-detail"),  # if you want a detail view, add later
+    path("post/<int:pk>/edit/", views.PostUpdateView.as_view(), name="post-update"),
+    path("post/<int:pk>/delete/", views.PostDeleteView.as_view(), name="post-delete"),
+
+    # -------------------------
+    # COMMENTS
+    # -------------------------
+    path("post/<int:pk>/comments/create/", views.CommentCreateView.as_view(), name="comment-create"),
+
+    path("comments/<int:pk>/edit/", views.CommentUpdateView.as_view(), name="comment-update"),
+    path("comments/<int:pk>/delete/", views.CommentDeleteView.as_view(), name="comment-delete"),
+
+    path("comments/", views.CommentListView.as_view(), name="comment-list"),
 ]
