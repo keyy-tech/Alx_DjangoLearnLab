@@ -17,7 +17,7 @@ def create_user(request):
             return redirect("login")
         messages.warning(request, "Error creating account.Please try again")
     context = {"form": form}
-    return render(request, "user/signup.html", context)
+    return render(request, "user/../templates/blog/signup.html", context)
 
 
 def login_view(request):
@@ -29,7 +29,7 @@ def login_view(request):
         messages.error(request, "Invalid username or password")
         return redirect("home")
     context = {"form": form}
-    return render(request, "user/login.html", context)
+    return render(request, "user/../templates/blog/login.html", context)
 
 
 @login_required
@@ -42,7 +42,7 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     context = {"users": request.user}
-    return render(request, "user/profile.html", context)
+    return render(request, "user/../templates/blog/profile.html", context)
 
 
 @login_required
@@ -56,7 +56,7 @@ def update_profile(request):
             return redirect("profile")
         messages.warning(request, "Error updating profile. Please try again")
     context = {"form": form}
-    return render(request, "user/update_profile.html", context)
+    return render(request, "user/../templates/blog/update_profile.html", context)
 
 
 @login_required
@@ -73,4 +73,4 @@ def delete_account(request):
         return redirect("home")
 
     context = {"user": request.user}
-    return render(request, "user/delete_account.html", context)
+    return render(request, "user/../templates/blog/delete_account.html", context)
