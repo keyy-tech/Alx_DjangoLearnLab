@@ -189,3 +189,15 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
 class CommentListView(generic.ListView):
     template_name = "blog/comment_lists.html"
     model = Comment
+
+
+class PostByTagListView(generic.ListView):
+    model = Post
+    template_name = "blog/post_lists.html"  # reuse your post list template
+    context_object_name = "posts"
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get("tag_slug")  # gets 'python' or 'django' from URL
+        return Post.objects.filter(tags__name__in=[tag_slug]).order_by(
+            "-published_date"
+        )
