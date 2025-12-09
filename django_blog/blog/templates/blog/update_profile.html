@@ -1,11 +1,13 @@
-{% extends 'blog/base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}Login - Blog Platform{% endblock title %}
+{% block title %}
+	Update Profile - Blog Platform
+{% endblock %}
 
 {% block content %}
-    <form method="POST" class="form-card">
+    <form method="post">
         {% csrf_token %}
-        <h2 class="form-title">Login to Your Account</h2>
+        <h2 class="form-title">Create a New Account</h2>
         <!-- Django Messages Display -->
         {% if messages %}
         <div class="messages-container">
@@ -15,6 +17,6 @@
         </div>
         {% endif %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <button type="submit" class="btn btn-primary btn-block">Update Profile</button>
     </form>
-{% endblock content %}
+{% endblock %}
