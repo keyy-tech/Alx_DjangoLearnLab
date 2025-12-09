@@ -111,6 +111,7 @@ class PostListView(generic.ListView):
     def get_queryset(self):
         return Post.objects.all().order_by("-published_date")
 
+
 class PostDetailView(generic.DetailView):
     template_name = "blog/post_detail.html"
     model = Post
