@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
 from .forms import RegisterForm, LoginForm, PostForm, CommentForm
-from .models import Post, Comments
+from .models import Post, Comment
 
 
 # ----------------------------
@@ -106,9 +106,15 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
 class PostListView(generic.ListView):
     template_name = "blog/post_lists.html"
     model = Post
+    context_object_name = "posts"
 
     def get_queryset(self):
         return Post.objects.all().order_by("-published_date")
+
+class PostDetailView(generic.DetailView):
+    template_name = "blog/post_detail.html"
+    model = Post
+    context_object_name = "post"
 
 
 # ----------------------------
@@ -119,7 +125,7 @@ class PostListView(generic.ListView):
 class CommentCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = "blog/comment_create.html"
     form_class = CommentForm
-    model = Comments
+    model = Comment
 
     def form_valid(self, form):
         post_id = self.kwargs["pk"]
@@ -136,7 +142,7 @@ class CommentCreateView(LoginRequiredMixin, generic.CreateView):
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     template_name = "blog/comment_update.html"
     form_class = CommentForm
-    model = Comments
+    model = Comment
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -151,7 +157,7 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateV
 
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
-    model = Comments
+    model = Comment
 
     def test_func(self):
         comment = self.get_object()
@@ -163,4 +169,4 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteV
 
 class CommentListView(generic.ListView):
     template_name = "blog/comment_lists.html"
-    model = Comments
+    model = Comment
