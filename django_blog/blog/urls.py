@@ -28,19 +28,19 @@ urlpatterns = [
     # COMMENTS
     # -------------------------
     path(
-        "post/<int:pk>/comments/create/",
+        "post/<int:pk>/comments/new/",
         views.CommentCreateView.as_view(),
         name="comment-create",
     ),
     path(
-        "comments/<int:pk>/edit/",
+        "comment/<int:pk>/update/",
         views.CommentUpdateView.as_view(),
         name="comment-update",
     ),
     path(
-        "comments/<int:pk>/delete/",
+        "comment/<int:pk>/delete/",
         views.CommentDeleteView.as_view(),
         name="comment-delete",
     ),
-    path("comments/", views.CommentListView.as_view(), name="comment-list"),
+    path("comment/", views.CommentListView.as_view(), name="comment-list"),
 ]
