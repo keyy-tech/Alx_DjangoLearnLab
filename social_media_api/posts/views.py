@@ -8,6 +8,7 @@ from .serializers import PostSerializer, CommentSerializer
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
+    queryset = Post.objects.all()
 
     def get_queryset(self):
         # Only return posts authored by the logged-in user
@@ -64,6 +65,8 @@ class PostViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
+    queryset = Comment.objects.all()
+
 
     def get_queryset(self):
         # Only return comments authored by the logged-in user
