@@ -16,8 +16,6 @@ class RegisterView(CreateAPIView):
     permission_classes = [AllowAny]
     models = Accounts
 
-    
-
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]

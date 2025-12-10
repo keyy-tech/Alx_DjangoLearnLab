@@ -39,4 +39,5 @@ urlpatterns = [
     ),
     path("silk/", include("silk.urls", namespace="silk")),
     path("api/accounts/", include("accounts.urls")),
+    path("api/posts/", include("posts.urls")),
 ]

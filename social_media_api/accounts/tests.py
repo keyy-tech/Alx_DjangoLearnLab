@@ -288,7 +288,6 @@ class AccountsAPITestCase(APITestCase):
             },
         )
         token = login_response.data.get("token")
-        
 
         # Set authentication credentials
         self.client.credentials(HTTP_AUTHORIZATION=f"Token {token}")

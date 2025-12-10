@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileView, RegisterView, LogoutView,AdminUsersView
+from .views import ProfileView, RegisterView, LogoutView, AdminUsersView
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [

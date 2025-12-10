@@ -39,6 +39,6 @@ class AccountsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop("password1")
-        user = get_user_model().objects.create_user(**validated_data)  
-        Token.objects.create(user=user)  
+        user = get_user_model().objects.create_user(**validated_data)
+        Token.objects.create(user=user)
         return user

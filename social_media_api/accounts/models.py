@@ -5,7 +5,10 @@ from django.contrib.auth.models import AbstractUser
 class Accounts(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(
-        default="profile_picture/default.jpg", upload_to="profile_picture",blank=True, null=True
+        default="profile_picture/default.jpg",
+        upload_to="profile_picture",
+        blank=True,
+        null=True,
     )
     followers = models.ManyToManyField(
         "self", related_name="following", symmetrical=False
