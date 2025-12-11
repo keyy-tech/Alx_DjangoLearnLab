@@ -2,9 +2,6 @@ from rest_framework.request import Request
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from posts.models import Post
-from posts.serializers import PostSerializer
 from .serializers import AccountsSerializer
 from rest_framework.generics import CreateAPIView
 from .models import Accounts as CustomUser
@@ -97,14 +94,4 @@ class UnFollowUserAPIView(generics.GenericAPIView):
         return Response(data,status=status.HTTP_200_OK)
 
 
-class UserFeed(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get(self,request:Request,*args,**kwargs):
-        following_users = request.user.following.all()
-
-        feed_posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
-
-        serializer = PostSerializer(feed_posts,many=True)
-
-        return Response(serializer.data,status=status.HTTP_200_OK)

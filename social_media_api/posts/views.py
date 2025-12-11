@@ -104,3 +104,16 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(
             {"message": "Comment deleted successfully"}, status=status.HTTP_200_OK
         )
+
+
+class UserFeed(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self,request:Request,*args,**kwargs):
+        following_users = request.user.following.all()
+
+        feed_posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
+
+        serializer = PostSerializer(feed_posts,many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
