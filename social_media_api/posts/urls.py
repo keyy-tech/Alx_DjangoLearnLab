@@ -8,4 +8,6 @@ router.register(r"posts", views.PostViewSet)
 router.register(r"comments", views.CommentViewSet)
 
 
-urlpattern = router.urls
+urlpatterns = [
+    path("feed/",views.UserFeedView.as_view(),name="user-feed")
+] + router.urls
