@@ -133,23 +133,20 @@ class UserLikePostView(generics.GenericAPIView):
 
     def post(self, request, pk, *args, **kwargs):
         post = get_object_or_404(Post, id=pk)
-        current_user = request.user
 
-        # create the like
-        if Like.objects.filter(user=current_user, post=post).exists():
-            return Response(
-                {"detail": "You can't double the like a post"},
-                status=status.HTTP_400_BAD_REQUEST,
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+
+        if created:
+            # Create a notification
+            Notification.objects.create(
+                recipient=post.author,
+                actor=request.user,
+                verb="liked",
+                target=post,
             )
-
-        like = Like.objects.create(user=current_user, post=post)
-        like.save()
-
-        return Response(
-            {
-                "detail": f"You have successfully liked the post with title - {post.title} by {post.author.get_full_name()}."
-            }
-        )
+            return Response({"detail": "Post liked."}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"detail": "Already liked."}, status=status.HTTP_200_OK)
 
 
 @extend_schema(request=None, responses=None, tags=["User Like"])
