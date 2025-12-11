@@ -1,11 +1,14 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework import permissions
-from .models import Post, Comment,Like
+from .models import Post, Comment, Like
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
+
+@extend_schema(tags=["Posts"])
 class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -63,6 +66,7 @@ class PostViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(tags=["Comments"])
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -107,60 +111,65 @@ class CommentViewSet(viewsets.ModelViewSet):
         )
 
 
+@extend_schema(request=None, responses=None, tags=["User Feed"])
 class UserFeedView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         following_users = request.user.following.all()
 
-        feed_posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
+        feed_posts = Post.objects.filter(author__in=following_users).order_by(
+            "-created_at"
+        )
 
-        serializer = PostSerializer(feed_posts,many=True)
+        serializer = PostSerializer(feed_posts, many=True)
 
-        return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@extend_schema(request=None, responses=None, tags=["User Like"])
 class UserLikePostView(generics.GenericAPIView):
     permissions_classes = [permissions.IsAuthenticated]
 
-    def post(self,request,pk,*args,**kwargs):
-        post = get_object_or_404(Post,id=pk)
+    def post(self, request, pk, *args, **kwargs):
+        post = get_object_or_404(Post, id=pk)
         current_user = request.user
 
         # create the like
-        if Like.objects.filter(user=current_user,post=post).exists():
+        if Like.objects.filter(user=current_user, post=post).exists():
             return Response(
-                {"detail":"You can't double the like a post"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"detail": "You can't double the like a post"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
-        like = Like.objects.create(user=current_user,post=post)
+        like = Like.objects.create(user=current_user, post=post)
         like.save()
 
         return Response(
-            {"detail":f"You have successfully liked the post with title - {post.title} by {post.author.get_full_name()}."}
+            {
+                "detail": f"You have successfully liked the post with title - {post.title} by {post.author.get_full_name()}."
+            }
         )
 
 
-
+@extend_schema(request=None, responses=None, tags=["User Like"])
 class UserUnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self,request,pk,*args,**kwargs):
-        post = get_object_or_404(Post,id=pk)
+    def post(self, request, pk, *args, **kwargs):
+        post = get_object_or_404(Post, id=pk)
         current_user = request.user
 
-        like = Like.objects.filter(user=current_user,post=post).first()
+        like = Like.objects.filter(user=current_user, post=post)
         if not like:
             return Response(
-                {"detail":"You have not liked this post"},
-                status=status.HTTP_400_BAD_REQUEST
+                {"detail": "You have not liked this post"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         like.delete()
 
         return Response(
-            {"detail":f"You have unliked the post '{post.title}'"},
-            status=status.HTTP_200_OK
+            {"detail": f"You have unliked the post '{post.title}'"},
+            status=status.HTTP_200_OK,
         )
-
