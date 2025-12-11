@@ -4,17 +4,19 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import AccountsSerializer
 from rest_framework.generics import CreateAPIView
-from .models import Accounts
+from .models import Accounts as CustomUser
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+
 
 
 class RegisterView(CreateAPIView):
-    queryset = Accounts.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = AccountsSerializer
     permission_classes = [AllowAny]
-    models = Accounts
+    models = CustomUser
 
 
 class LogoutView(APIView):
@@ -44,7 +46,7 @@ class AdminUsersView(APIView):
     permission_classes = [IsAdminUser]
 
     def get(self, request: Request):
-        users = Accounts.objects.all()
+        users = CustomUser.objects.all()
         serializer = AccountsSerializer(users, many=True)
         response = {
             "status": "success",
@@ -53,11 +55,11 @@ class AdminUsersView(APIView):
         return Response(response, status=status.HTTP_200_OK)
 
 
-class FollowUserAPIView(APIView):
+class FollowUserAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request: Request, user_id: int):
-        user_to_follow = get_object_or_404(Accounts, id=user_id)
+        user_to_follow = get_object_or_404(CustomUser, id=user_id)
         current_user = request.user
         if user_to_follow == current_user:
             return Response(
@@ -73,11 +75,11 @@ class FollowUserAPIView(APIView):
         return Response(data,status=status.HTTP_200_OK)
 
 
-class UnFollowUserAPIView(APIView):
+class UnFollowUserAPIView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self,request:Request,user_id:int):
-        user_to_unfollow = get_object_or_404(Accounts,id=user_id)
+        user_to_unfollow = get_object_or_404(CustomUser,id=user_id)
         current_user = request.user
         if user_to_unfollow == current_user:
             return Response(
