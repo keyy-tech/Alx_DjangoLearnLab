@@ -2,6 +2,9 @@ from rest_framework.request import Request
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from posts.models import Post
+from posts.serializers import PostSerializer
 from .serializers import AccountsSerializer
 from rest_framework.generics import CreateAPIView
 from .models import Accounts as CustomUser
@@ -78,7 +81,7 @@ class FollowUserAPIView(generics.GenericAPIView):
 class UnFollowUserAPIView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self,request:Request,user_id:int):
+    def post(self,request:Request,user_id,*args,**kwargs):
         user_to_unfollow = get_object_or_404(CustomUser,id=user_id)
         current_user = request.user
         if user_to_unfollow == current_user:
@@ -94,3 +97,14 @@ class UnFollowUserAPIView(generics.GenericAPIView):
         return Response(data,status=status.HTTP_200_OK)
 
 
+class UserFeed(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self,request:Request,*args,**kwargs):
+        following_users = request.user.following.all()
+
+        feed_posts = Post.objects.filter(author__in=following_users).order_by("-created_at")
+
+        serializer = PostSerializer(feed_posts,many=True)
+
+        return Response(serializer.data,status=status.HTTP_200_OK)
