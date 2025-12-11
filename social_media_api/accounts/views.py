@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from .serializers import AccountsSerializer
 from rest_framework.generics import CreateAPIView
 from .models import Accounts as CustomUser
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework import permissions
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
@@ -15,12 +15,12 @@ from rest_framework import generics
 class RegisterView(CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = AccountsSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [permissions.AllowAny]
     models = CustomUser
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request: Request):
         token = get_object_or_404(Token, user=request.user)
@@ -31,7 +31,7 @@ class LogoutView(APIView):
 
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: Request):
         serializer = AccountsSerializer(request.user)
@@ -43,7 +43,7 @@ class ProfileView(APIView):
 
 
 class AdminUsersView(APIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [permissions.IsAdminUser]
 
     def get(self, request: Request):
         users = CustomUser.objects.all()
@@ -56,7 +56,7 @@ class AdminUsersView(APIView):
 
 
 class FollowUserAPIView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request: Request, user_id: int):
         user_to_follow = get_object_or_404(CustomUser, id=user_id)
@@ -76,7 +76,7 @@ class FollowUserAPIView(generics.GenericAPIView):
 
 
 class UnFollowUserAPIView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self,request:Request,user_id:int):
         user_to_unfollow = get_object_or_404(CustomUser,id=user_id)
