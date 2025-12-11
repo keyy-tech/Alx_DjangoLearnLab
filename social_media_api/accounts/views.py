@@ -51,3 +51,44 @@ class AdminUsersView(APIView):
             "data": serializer.data,
         }
         return Response(response, status=status.HTTP_200_OK)
+
+
+class FollowUserAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request: Request, user_id: int):
+        user_to_follow = get_object_or_404(Accounts, id=user_id)
+        current_user = request.user
+        if user_to_follow == current_user:
+            return Response(
+                {"detail": "You can't follow yourself"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user_to_follow.followers.add(current_user)
+
+        data = {
+            "message": f"You are now following {user_to_follow.username}"
+        }
+
+        return Response(data,status=status.HTTP_200_OK)
+
+
+class UnFollowUserAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self,request:Request,user_id:int):
+        user_to_unfollow = get_object_or_404(Accounts,id=user_id)
+        current_user = request.user
+        if user_to_unfollow == current_user:
+            return Response(
+                {"detail":"You can't unfollow yourself"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        user_to_unfollow.followers.remove(current_user)
+
+        data = {
+            "message":f"You have unfollowed {user_to_unfollow.username}"
+        }
+        return Response(data,status=status.HTTP_200_OK)
+
+

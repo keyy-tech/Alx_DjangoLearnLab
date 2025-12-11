@@ -67,7 +67,6 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Comment.objects.all()
 
-
     def get_queryset(self):
         # Only return comments authored by the logged-in user
         return Comment.objects.filter(author=self.request.user).select_related(
